@@ -8,3 +8,4 @@ class Category(models.Model):
 
     def __unique__(self):
         return self.title
+    
