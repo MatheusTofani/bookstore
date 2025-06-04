@@ -8,15 +8,14 @@ ENV PYTHONUNBUFFERED=1 \
     PIP_DEFAULT_TIMEOUT=100 \
     POETRY_VERSION=1.8.4 \
     POETRY_HOME="/opt/poetry" \
-    POETRY_VIRTUALENVS_IN_PROJECT=true \
+    POETRY_VIRTUALENVS_IN_PROJECT=false \
     PATH="/opt/poetry/bin:$PATH"
 
 # Instalar dependências e o Poetry
 RUN apt-get update && apt-get install --no-install-recommends -y \
-        curl build-essential libpq-dev gcc libc-dev \
+        curl libpq-dev gcc build-essential \
     && curl -sSL https://install.python-poetry.org | python3 - \
     && poetry --version \
-    && apt-get purge --auto-remove -y build-essential \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
@@ -27,7 +26,8 @@ WORKDIR /app
 COPY pyproject.toml poetry.lock* ./
 
 # Instalar dependências do Poetry (sem dependências de desenvolvimento)
-RUN poetry install --only main
+RUN poetry config virtualenvs.create false && \
+    poetry install --only main --no-interaction --no-ansi
 
 # Copiar o restante do projeto
 COPY . .
@@ -36,4 +36,4 @@ COPY . .
 EXPOSE 8000
 
 # Comando padrão para rodar o servidor
-CMD ["poetry", "run", "python", "manage.py", "runserver", "0.0.0.0:8000"]
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
