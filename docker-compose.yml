@@ -1,4 +1,3 @@
-version: '3.8'
 
 services:
   db:
@@ -16,6 +15,8 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+    networks:
+      - backend
 
   web:
     build: .
@@ -31,6 +32,12 @@ services:
         condition: service_healthy
     environment:
       PYTHONPATH: "/app"
+    networks:
+      - backend
+
+networks:
+  backend:
+    driver: bridge
 
 volumes:
   postgres_data:
