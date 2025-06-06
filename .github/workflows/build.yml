@@ -4,13 +4,12 @@ on: [push]
 
 jobs:
   build:
+    runs-on: ubuntu-latest
+
     strategy:
       fail-fast: false
       matrix:
-    python-version: [3.12, 3.13]
-
-
-    runs-on: ubuntu-latest
+        python-version: [3.12, 3.13]
 
     steps:
     - uses: actions/checkout@v2
@@ -31,8 +30,7 @@ jobs:
 
     - name: Install dependencies
       shell: bash
-      run: python -m poetry install
+      run: poetry install --with dev
 
     - name: Test
-      run: |
-        poetry run python manage.py test
+      run: poetry run python manage.py test
