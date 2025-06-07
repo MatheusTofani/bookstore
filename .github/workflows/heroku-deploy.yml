@@ -37,4 +37,4 @@ jobs:
           HEROKU_APP_NAME: ${{ secrets.HEROKU_APP_NAME }}
 
       - name: Push code to Heroku
-        run: git push heroku main:main
+        run: git push --force heroku main:main
