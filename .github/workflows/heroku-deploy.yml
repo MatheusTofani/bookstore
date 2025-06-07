@@ -10,8 +10,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Check out repository
+      - name: Check out repository with full history
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 0   # busca todo o histórico para evitar shallow clone
 
       - name: Install Heroku CLI
         run: |
