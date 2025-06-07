@@ -1,19 +1,31 @@
-name: Deploy to Heroku
+name: CI and Deploy to Heroku
 
 on:
+  pull_request:
+    branches:
+      - main  # roda quando o PR é aberto/atualizado para a branch main
   push:
     branches:
-      - main
+      - main  # roda no push na main (ex: merge do PR)
 
 jobs:
-  deploy:
+  test:
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
-
     steps:
-      - name: Check out repository with full history
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
         with:
-          fetch-depth: 0   # busca todo o histórico para evitar shallow clone
+          fetch-depth: 0
+      # aqui você roda seus testes, linters, etc.
+
+  deploy:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
 
       - name: Install Heroku CLI
         run: |
