@@ -1,31 +1,19 @@
-name: CI and Deploy to Heroku
+name: Deploy to Heroku
 
 on:
-  pull_request:
-    branches:
-      - main  # roda quando o PR é aberto/atualizado para a branch main
   push:
     branches:
-      - main  # roda no push na main (ex: merge do PR)
+      - main
 
 jobs:
-  test:
-    if: github.event_name == 'pull_request'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      # aqui você roda seus testes, linters, etc.
-
   deploy:
-    if: github.event_name == 'push'
     runs-on: ubuntu-latest
-    needs: test
+
     steps:
-      - uses: actions/checkout@v2
+      - name: Check out repository with full history
+        uses: actions/checkout@v3
         with:
-          fetch-depth: 0
+          fetch-depth: 0   
 
       - name: Install Heroku CLI
         run: |
@@ -51,4 +39,4 @@ jobs:
           HEROKU_APP_NAME: ${{ secrets.HEROKU_APP_NAME }}
 
       - name: Push code to Heroku
-        run: git push --force heroku main:main
+        run: git push heroku main:master
