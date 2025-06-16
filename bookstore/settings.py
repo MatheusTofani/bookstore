@@ -27,7 +27,7 @@ DEBUG = bool(int(os.environ.get('DEBUG', default='1')))
 
 ALLOWED_HOSTS = os.environ.get(
     'DJANGO_ALLOWED_HOSTS',
-    'localhost 127.0.0.1 [::1] bookstore-ebacapi-db42ff60a5ae.herokuapp.com'
+    'localhost 127.0.0.1 [::1] matheustofani.pythonanywhere.com'
 ).split()
 
 
